@@ -1,7 +1,4 @@
-# Handoff to Part 3 (Modelling Team)
-
-This document tells you exactly what's ready, what's in each file, and the
-methodological rules you need to follow to keep the pipeline leakage-free.
+# Handoff to Part 3
 
 ## TL;DR — start here
 
