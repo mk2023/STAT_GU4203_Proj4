@@ -1,0 +1,31 @@
+{
+  "description": "Columns to drop in the 'screening-only' sensitivity analysis. Two categories: prior-diagnosis features and guideline-threshold features derived from routine labs.",
+  "columns_to_drop": [
+    "num__lifestyle_risk_score",
+    "num__diabetes_borderline_flag",
+    "cat__bp_stage_elevated",
+    "cat__bp_stage_htn_stage1",
+    "cat__bp_stage_htn_stage2",
+    "cat__bp_stage_normal",
+    "cat__hba1c_status_diabetes",
+    "cat__hba1c_status_normal",
+    "cat__hba1c_status_prediabetes"
+  ],
+  "diagnosis_history_columns": [
+    "num__lifestyle_risk_score",
+    "num__diabetes_borderline_flag"
+  ],
+  "threshold_derived_columns": [
+    "cat__bp_stage_elevated",
+    "cat__bp_stage_htn_stage1",
+    "cat__bp_stage_htn_stage2",
+    "cat__bp_stage_normal",
+    "cat__hba1c_status_diabetes",
+    "cat__hba1c_status_normal",
+    "cat__hba1c_status_prediabetes"
+  ],
+  "screening_only_substitutes": {
+    "lifestyle_risk_score": "lifestyle_risk_score_no_dx"
+  },
+  "rationale": "Self-reported diagnoses can leak post-treatment state into the predictor set (e.g., diagnosed CVD patients are on medication that lowers cholesterol). Threshold features (bp_stage_*, hba1c_status_*) are not prior diagnosis but are derived from routine measurements via ACC/AHA and ADA cutoffs; excluding them lets the model rely on raw measurements only. The modelling team should report at minimum the full vs screening-only contrast; a 3-way contrast (full / drop diagnosis only / drop diagnosis + thresholds) gives cleaner attribution. lifestyle_risk_score_no_dx is the diagnosis-free 0-3 version of lifestyle_risk_score and should be substituted in the screening-only model."
+}

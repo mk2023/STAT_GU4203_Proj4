@@ -1,0 +1,5 @@
+cluster,age_years,bmi,waist_cm,sbp_avg,dbp_avg,pulse_pressure,total_chol,hdl,triglycerides,fasting_glucose,hba1c,n,cvd_rate,phenotype
+0,29.84,23.33,81.46,107.48,65.54,41.94,169.02,56.53,81.34,95.07,5.26,2679,0.05,younger / low-risk
+1,50.44,35.23,113.79,117.46,76.05,41.41,188.18,47.23,141.8,107.34,5.77,2310,0.13,younger / obese
+2,58.97,32.59,109.92,127.35,76.56,50.78,185.07,45.34,227.43,221.84,9.65,201,0.26,older / obese / dysglycemic / dyslipidemic
+3,65.86,27.51,97.38,140.09,78.4,61.69,194.73,60.26,110.12,106.07,5.76,1758,0.16,older / hypertensive

@@ -1,0 +1,24 @@
+# Raw NHANES files (downloadable from CDC, too large for repo)
+rawfiles/*.xpt
+rawfiles.zip
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+__MACOSX/
+
+# IDE caches
+.cache/
+.specstory/
+.vscode/
+.idea/
+.Rhistory
+.RDataTmp
+
+# Backups
+*_backup_*
+*.bak

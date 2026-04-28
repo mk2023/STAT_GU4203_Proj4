@@ -1,0 +1,11 @@
+feature,lower,upper,clipped_low_train,clipped_high_train
+bmi,-2.0,60.3,0,15
+waist_cm,21.5,179.0,0,0
+sbp_avg,44.67,198.67,0,12
+dbp_avg,24.33,124.67,0,2
+total_chol,-6.0,379.0,0,5
+hdl,-10.0,116.0,0,9
+ldl,-67.0,283.0,0,2
+triglycerides,-143.0,361.0,0,43
+fasting_glucose,40.0,166.0,0,130
+hba1c,3.5,7.7,1,228
