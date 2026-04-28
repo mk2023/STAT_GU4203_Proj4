@@ -154,10 +154,15 @@ def build_lifestyle() -> pd.DataFrame:
         columns={
             "SMQ020": "smoked_100_life_code",
             "SMQ040": "smoke_now_code",
-            "ALQ121": "drank_12plus_life_code",
-            "ALQ130": "alcohol_days_per_year",
-            "PAD800": "vigorous_activity_code",
-            "PAD820": "moderate_activity_code",
+            # CDC labels:
+            # ALQ121 = drinking frequency in past 12 months (ordinal code)
+            # ALQ130 = average alcoholic drinks/day in past 12 months
+            "ALQ121": "drinking_frequency_code",
+            "ALQ130": "avg_drinks_per_day",
+            # CDC labels:
+            # PAD800 = minutes moderate LTPA, PAD820 = minutes vigorous LTPA
+            "PAD800": "moderate_ltpa_minutes",
+            "PAD820": "vigorous_ltpa_minutes",
             "DIQ010": "diabetes_told_code",
             "BPQ020": "hypertension_told_code",
         }
@@ -165,9 +170,6 @@ def build_lifestyle() -> pd.DataFrame:
 
     binary_cols = [
         "smoked_100_life_code",
-        "drank_12plus_life_code",
-        "vigorous_activity_code",
-        "moderate_activity_code",
         "diabetes_told_code",
         "hypertension_told_code",
     ]
