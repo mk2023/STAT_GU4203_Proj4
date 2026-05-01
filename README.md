@@ -18,14 +18,18 @@ STAT_GU4203_Proj4-main/
 ├── outputs/
 │   ├── eda/                    # Descriptive + statistical EDA results
 │   ├── clusters/               # K-Means risk phenotypes
-│   └── features/               # Model-ready train/test matrices + pipeline
+│   ├── features/               # Model-ready train/test matrices + pipeline
+│   └── models/                 # Part 3 supervised models + diagnostics
 ├── rawfiles/                   # Original NHANES .xpt files (Part 1 input)
 ├── src/                        # Python scripts
 │   ├── preprocess_eda.py             (Part 1)
 │   ├── cluster_eda.py                (Part 2)
 │   ├── feature_engineering.py        (Part 2)
 │   ├── advanced_eda.py               (Part 2)
-│   └── verify_part2.py               (automated verification)
+│   ├── verify_part2.py               (automated verification)
+│   ├── supervised_models.py          (Part 3: 4 models x 3 feature sets)
+│   └── predict_api.py                (Part 3: inference wrapper for dashboards)
+├── CLAUDE.md                   # Guidance for Claude Code agents
 └── README.md
 ```
 
@@ -34,13 +38,19 @@ STAT_GU4203_Proj4-main/
 ### Requirements
 
 - Python 3.9+
-- Packages: `pandas`, `numpy`, `scikit-learn`, `scipy`, `statsmodels`,
-  `matplotlib`, `seaborn`, `joblib`, `pyreadstat`
+- Packages: `pandas`, `numpy<2`, `scikit-learn`, `scipy`, `statsmodels`,
+  `matplotlib`, `seaborn`, `joblib`, `pyreadstat`, and for Part 3:
+  `xgboost>=3`, `catboost`, `shap`
 
 Install:
 ```bash
-pip install pandas numpy scikit-learn scipy statsmodels matplotlib seaborn joblib pyreadstat
+pip install "numpy<2" pandas scikit-learn scipy statsmodels matplotlib seaborn joblib pyreadstat
+pip install xgboost catboost shap
 ```
+
+The `numpy<2` pin avoids ABI mismatches with anaconda-shipped scipy on
+Windows (numpy 2.x triggers `ImportError: numpy.core.multiarray failed
+to import` on scipy/sklearn compiled against numpy 1.x).
 
 ### Run from scratch
 
@@ -55,11 +65,28 @@ python3 src/cluster_eda.py            # K-Means risk phenotypes
 python3 src/feature_engineering.py    # Engineering + leakage-safe pipeline
 python3 src/advanced_eda.py           # Statistical hypothesis testing
 
-# Verification (32 automated checks)
+# Verification (32 automated checks for Parts 1-2)
 python3 src/verify_part2.py
+
+# Part 3: 4 models x 3 feature sets, calibration, threshold, SHAP (~12 min on 16-thread CPU)
+python3 src/supervised_models.py
 ```
 
-Expected final output: `ALL CHECKS PASSED — outputs match expectations.`
+Expected final output of `verify_part2.py`:
+`ALL CHECKS PASSED — outputs match expectations.`
+
+`supervised_models.py` writes nine artifacts to `outputs/models/`:
+
+| File | Contents |
+|---|---|
+| `cv_results.csv` | 12 rows (4 models x 3 feature sets) of mean ± std CV metrics |
+| `final_model.joblib` | Winning model retrained on full train, with calibration |
+| `final_model_card.json` | Model name, feature set, hyperparameters, threshold, test metrics |
+| `test_metrics.json` | Test ROC-AUC, PR-AUC, Brier (raw / Platt / isotonic), F1 |
+| `roc_pr_curves.png` | All 12 models on test set; winner thickened |
+| `calibration.png` | Reliability diagram (raw vs Platt vs isotonic) |
+| `threshold_analysis.csv` | Out-of-fold precision / recall / F1 / specificity by threshold |
+| `shap_summary.png`, `shap_bar.png` | Global feature attribution on test |
 
 All scripts use `random_state=42`, so results are deterministic.
 
@@ -76,6 +103,15 @@ All scripts use `random_state=42`, so results are deterministic.
 - **Strongest predictor:** age (Cohen's d = 0.95, "large" effect)
 - **Modeling matrix:** train (6,245 × 81), test (1,562 × 81) — stratified
   80/20 split
+- **Part 3 winner:** L2-regularized logistic regression on the full feature
+  set (80 cols, dropping the diagnosis-free lifestyle score) — CV ROC-AUC
+  0.824 ± 0.010, test ROC-AUC 0.813, test PR-AUC 0.391
+- **Calibration:** Platt scaling reduces Brier from 0.175 → 0.092
+- **Operating point:** decision threshold 0.10 yields test recall 85.2% and
+  precision 25.9% (clinical screening criterion: recall ≥ 80%)
+- **Sensitivity analysis:** ROC-AUC differs by ≤0.003 across the full /
+  no-diagnosis / raw-only feature subsets — predictive signal lives in
+  raw lab and vital measurements, not in prior-diagnosis labels
 
 ## Data
 
@@ -87,7 +123,7 @@ Raw NHANES files are from the CDC public repository
 - **Part 1 (Data Acquisition & Preparation + basic EDA):** [Teammate 1]
 - **Part 2 (Unsupervised EDA + Feature Engineering & Preprocessing):**
   Qiujun Zhang
-- **Part 3 (Supervised Modeling):** [Teammate 3]
+- **Part 3 (Supervised Modeling):** Junye
 - **Part 4 (Final Report & Communication):** [Teammate 4]
 
 See `docs/feature_engineering_report.md` for full Part 2 methodology.

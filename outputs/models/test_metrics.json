@@ -1,0 +1,16 @@
+{
+  "model": "LogReg",
+  "feature_set": "A",
+  "n_features": 80,
+  "roc_auc": 0.8130490483162519,
+  "pr_auc": 0.3909311287938104,
+  "brier_raw": 0.17465042622142798,
+  "f1_at_0.5": 0.4148936170212766,
+  "brier_platt": 0.09150067052305978,
+  "brier_isotonic": 0.09177673254661052,
+  "chosen_calibration": "platt",
+  "recommended_threshold": 0.1,
+  "test_recall_at_recommended": 0.8520408163265306,
+  "test_precision_at_recommended": 0.2589147286821705,
+  "test_f1_at_recommended": 0.3971462544589774
+}
