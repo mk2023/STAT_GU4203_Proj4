@@ -22,3 +22,6 @@ __MACOSX/
 # Backups
 *_backup_*
 *.bak
+
+# Claude Code agent guidance (local-only)
+CLAUDE.md

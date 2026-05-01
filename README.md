@@ -29,7 +29,6 @@ STAT_GU4203_Proj4-main/
 │   ├── verify_part2.py               (automated verification)
 │   ├── supervised_models.py          (Part 3: 4 models x 3 feature sets)
 │   └── predict_api.py                (Part 3: inference wrapper for dashboards)
-├── CLAUDE.md                   # Guidance for Claude Code agents
 └── README.md
 ```
 
