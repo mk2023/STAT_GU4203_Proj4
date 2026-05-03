@@ -123,6 +123,6 @@ Raw NHANES files are from the CDC public repository
 - **Part 2 (Unsupervised EDA + Feature Engineering & Preprocessing):**
   Qiujun Zhang
 - **Part 3 (Supervised Modeling):** Junye
-- **Part 4 (Final Report & Communication):** [Teammate 4]
+- **Part 4 (Final Report & Communication):** Justine Dugger-Ades
 
 See `docs/feature_engineering_report.md` for full Part 2 methodology.
