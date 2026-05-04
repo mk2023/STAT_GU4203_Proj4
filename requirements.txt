@@ -1,0 +1,22 @@
+# Pinned for Streamlit Community Cloud deployment of src/dashboard.py.
+# Kept minimal: only what's needed at inference / chart-rendering time.
+# (xgboost / catboost / shap / pyreadstat are training-time only and
+# omitted to keep build time short.)
+
+# core stack — must match the numpy ABI used to fit final_model.joblib
+numpy<2
+pandas>=2.0,<3
+scipy>=1.11,<2
+scikit-learn>=1.3,<2
+joblib>=1.3
+
+# transitive: feature_engineering.py imports matplotlib/seaborn at module
+# top-level for its before/after diagnostic plot — dashboard inherits the
+# import even though it only calls the engineering helpers.
+matplotlib>=3.7,<4
+seaborn>=0.12,<1
+
+# dashboard
+streamlit>=1.36,<2
+streamlit-option-menu>=0.4,<1
+plotly>=5.20,<6

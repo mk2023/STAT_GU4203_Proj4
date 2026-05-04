@@ -3,7 +3,9 @@
 End-to-end machine learning project predicting cardiovascular disease (CVD)
 status from the U.S. CDC's NHANES 2021-2023 survey, using a combination of
 unsupervised exploration, clinically grounded feature engineering, and
-supervised classification.
+supervised classification. Includes an interactive Streamlit dashboard
+(`streamlit run src/dashboard.py`) that walks through the entire pipeline
+and exposes the calibrated model for live prediction.
 
 ## Project structure
 
@@ -28,7 +30,10 @@ STAT_GU4203_Proj4-main/
 │   ├── advanced_eda.py               (Part 2)
 │   ├── verify_part2.py               (automated verification)
 │   ├── supervised_models.py          (Part 3: 4 models x 3 feature sets)
-│   └── predict_api.py                (Part 3: inference wrapper for dashboards)
+│   ├── predict_api.py                (Part 3: inference wrapper for dashboards)
+│   ├── dashboard.py                  (Part 4: Streamlit dashboard entry point)
+│   ├── dashboard_helpers.py          (Part 4: Plotly factories + raw-input pipeline)
+│   └── dashboard_styles.py           (Part 4: CSS + hero / KPI / callout helpers)
 └── README.md
 ```
 
@@ -39,12 +44,14 @@ STAT_GU4203_Proj4-main/
 - Python 3.9+
 - Packages: `pandas`, `numpy<2`, `scikit-learn`, `scipy`, `statsmodels`,
   `matplotlib`, `seaborn`, `joblib`, `pyreadstat`, and for Part 3:
-  `xgboost>=3`, `catboost`, `shap`
+  `xgboost>=3`, `catboost`, `shap`. Part 4 dashboard adds: `streamlit`,
+  `streamlit-option-menu`, `plotly`.
 
 Install:
 ```bash
 pip install "numpy<2" pandas scikit-learn scipy statsmodels matplotlib seaborn joblib pyreadstat
-pip install xgboost catboost shap
+pip install xgboost catboost shap                       # Part 3
+pip install streamlit streamlit-option-menu plotly      # Part 4 dashboard
 ```
 
 The `numpy<2` pin avoids ABI mismatches with anaconda-shipped scipy on
@@ -89,6 +96,33 @@ Expected final output of `verify_part2.py`:
 
 All scripts use `random_state=42`, so results are deterministic.
 
+## Run the dashboard (Part 4)
+
+The dashboard reads only what `outputs/` already contains — it never refits
+the model — so as long as Parts 1–3 have been run (or the artefacts are
+checked in), launching the dashboard takes one command from the project root:
+
+```bash
+pip install streamlit streamlit-option-menu plotly      # one-time
+streamlit run src/dashboard.py
+```
+
+Default URL: <http://localhost:8501>. Five pages, navigated from the sidebar:
+
+| Page | What's there |
+|---|---|
+| **Overview** | Project framing, headline metrics, class-balance donut. |
+| **EDA & Clustering** | Cohen's d effect-size bar chart, correlation heatmap, K-Means PCA scatter, cluster CVD-rate bar, cluster profile heatmap. |
+| **Model Comparison** | 4 KPI cards for the best of each metric, switchable grouped bar chart of all 12 CV runs (4 algorithms × 3 feature sets), full sortable table. |
+| **Final Model** | Test ROC + PR + calibration curves (Plotly), top-15 LogReg coefficients, SHAP beeswarm, and a threshold slider that recomputes precision/recall/F1/specificity from the saved sweep. |
+| **Predict** | Three input paths — pick a row from the test set, upload a CSV with the 80 preprocessed columns, or fill a manual form (16 raw fields, training-set median/mode for the rest). Output: gauge + binary screening flag + per-row LogReg local SHAP + What-if slider for age / SBP / BMI / HbA1c / total cholesterol. |
+
+The Predict page goes through `src/predict_api.py`, so it always uses the
+calibrated probability and never refits anything. The manual-form path
+reuses `engineer_deterministic` and `add_metabolic_burden` from
+`src/feature_engineering.py` so derived features are recomputed using the
+same train-fit statistics as the deployed model.
+
 ## Key results
 
 - **Sample:** 11,933 NHANES participants; 7,807 with known CVD status
@@ -123,6 +157,7 @@ Raw NHANES files are from the CDC public repository
 - **Part 2 (Unsupervised EDA + Feature Engineering & Preprocessing):**
   Qiujun Zhang
 - **Part 3 (Supervised Modeling):** Junye
-- **Part 4 (Final Report & Communication):** Justine Dugger-Ades
+- **Part 4 (Communication — interactive dashboard):** Junye
+- **Part 4 (Final Report):** Justine Dugger-Ades
 
 See `docs/feature_engineering_report.md` for full Part 2 methodology.
